@@ -30,7 +30,7 @@ function operate(operator, num1, num2){
         result = multiply(num1, num2);
     }
     else {
-        result = divide(num1, num2);
+        num2 == 0 ? result = 'Err, No dividing by zero' : result = divide(num1, num2);
     }
 
     return result
@@ -48,6 +48,7 @@ function populateDisplay (button, type) {
     }
     else if (type == 'operator' && displayValues.operator && displayValues.num2) {
         let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
+        result = Math.round(result*1000000) / 1000000;
 
         display.innerHTML = result;
         displayValues = {num1: display.innerHTML, operator: button, num2: ''};
@@ -88,8 +89,15 @@ clearBtn.addEventListener('click', () => {
 })
 
 equalsBtn.addEventListener('click', () => {
+    if (!displayValues.operator) {
+        return
+    }
+    else if (!displayValues.num2) {
+        displayValues.num2 = displayValues.num1;
+    }
 
     let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
+    result = Math.round(result*1000000) / 1000000;
 
     display.innerHTML = result;
     displayValues = {num1: display.innerHTML, operator: '', num2: ''};
