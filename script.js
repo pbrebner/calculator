@@ -57,6 +57,15 @@ function populateDisplay (button, type) {
             !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
         }
     }
+    else if (type == 'del') {
+        if (display.innerHTML.length == 1) {
+            display.innerHTML = '0'
+        }
+        else {
+            display.innerHTML = display.innerHTML.slice(0,-1)
+        }
+        !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
+    }
     else if (type == 'number') {
         if (display.innerHTML == '0' || firstDigit == true) {
             display.innerHTML = button;
@@ -95,6 +104,7 @@ const operateBtns = document.querySelectorAll('.operateBtn');
 
 const decimalBtn = document.querySelector('.decimalBtn')
 const clearBtn = document.querySelector('.clearBtn');
+const delBtn = document.querySelector('.delBtn');
 const equalsBtn = document.querySelector('.equalsBtn');
 
 numberBtns.forEach((item) => {
@@ -112,13 +122,18 @@ operateBtns.forEach((item) => {
 })
 
 decimalBtn.addEventListener('click', () => {
-    decimal = '.';
+    decimal = decimalBtn.innerHTML;
     populateDisplay(decimal, 'decimal')
 })
 
 clearBtn.addEventListener('click', () => {
     display.innerHTML = '0';
     displayValues = {num1: display.innerHTML, operator: '', num2: ''};
+})
+
+delBtn.addEventListener('click', () => {
+    del = delBtn.innerHTML;
+    populateDisplay(del, 'del')
 })
 
 equalsBtn.addEventListener('click', () => {
