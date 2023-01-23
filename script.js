@@ -37,8 +37,11 @@ function operate(operator, num1, num2){
 
 function populateDisplay (button, type) {
 
-    //TODO: There is a bug if you use more more than one operator in a row since the first occurence sets it as firstDigit
     //TODO: Not sure about behavior after htting equals sign where the next number is just appended on to the result
+    
+    if (display.innerHTML.includes('Err')) {
+        display.innerHTML = '0';
+    }
 
     if (type == 'decimal') {
         if (display.innerHTML.includes(".")) {
@@ -54,20 +57,23 @@ function populateDisplay (button, type) {
             !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
         }
     }
-    else {
+    else if (type == 'number') {
         if (display.innerHTML == '0' || firstDigit == true) {
-
             display.innerHTML = button;
             !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
             firstDigit = false;
         }
-        else if (type == 'number') {
+        else {
             display.innerHTML += button;
             !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
         }
-        else if (type == 'operator' && displayValues.operator && displayValues.num2) {
+    }
+    else {
+        if(displayValues.operator && displayValues.num2) {
             let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
-            result = Math.round(result*1000000) / 1000000;
+            if (typeof result == 'number') {
+                result = Math.round(result*1000000) / 1000000;
+            }
     
             display.innerHTML = result;
             displayValues = {num1: display.innerHTML, operator: button, num2: ''};
@@ -124,8 +130,9 @@ equalsBtn.addEventListener('click', () => {
     }
 
     let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
-    result = Math.round(result*1000000) / 1000000;
-
+    if (typeof result == 'number') {
+        result = Math.round(result*1000000) / 1000000;
+    }    
     display.innerHTML = result;
     displayValues = {num1: display.innerHTML, operator: '', num2: ''};
 })
