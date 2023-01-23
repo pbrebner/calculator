@@ -32,31 +32,51 @@ function operate(operator, num1, num2){
     else {
         num2 == 0 ? result = 'Err, No dividing by zero' : result = divide(num1, num2);
     }
-
     return result
 }
 
 function populateDisplay (button, type) {
-    if (display.innerHTML == '0' || firstDigit == true) {
-        display.innerHTML = button;
-        !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
-        firstDigit = false;
-    }
-    else if (type == 'number') {
-        display.innerHTML += button;
-        !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
-    }
-    else if (type == 'operator' && displayValues.operator && displayValues.num2) {
-        let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
-        result = Math.round(result*1000000) / 1000000;
 
-        display.innerHTML = result;
-        displayValues = {num1: display.innerHTML, operator: button, num2: ''};
-        firstDigit = true;
+    //TODO: There is a bug if you use more more than one operator in a row since the first occurence sets it as firstDigit
+    //TODO: Not sure about behavior after htting equals sign where the next number is just appended on to the result
+
+    if (type == 'decimal') {
+        if (display.innerHTML.includes(".")) {
+            return
+        }
+        else if(firstDigit == true) {
+            display.innerHTML = '0' + button
+            !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
+            firstDigit = false;
+        }
+        else {
+            display.innerHTML += button;
+            !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
+        }
     }
     else {
-        displayValues.operator = button;
-        firstDigit = true;
+        if (display.innerHTML == '0' || firstDigit == true) {
+
+            display.innerHTML = button;
+            !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
+            firstDigit = false;
+        }
+        else if (type == 'number') {
+            display.innerHTML += button;
+            !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
+        }
+        else if (type == 'operator' && displayValues.operator && displayValues.num2) {
+            let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
+            result = Math.round(result*1000000) / 1000000;
+    
+            display.innerHTML = result;
+            displayValues = {num1: display.innerHTML, operator: button, num2: ''};
+            firstDigit = true;
+        }
+        else {
+            displayValues.operator = button;
+            firstDigit = true;
+        }
     }
 }
 
@@ -66,6 +86,8 @@ let displayValues =
 
 const numberBtns = document.querySelectorAll('.numberBtn');
 const operateBtns = document.querySelectorAll('.operateBtn');
+
+const decimalBtn = document.querySelector('.decimalBtn')
 const clearBtn = document.querySelector('.clearBtn');
 const equalsBtn = document.querySelector('.equalsBtn');
 
@@ -81,6 +103,11 @@ operateBtns.forEach((item) => {
         let operator = item.innerHTML;
         populateDisplay(operator, 'operator')
     })
+})
+
+decimalBtn.addEventListener('click', () => {
+    decimal = '.';
+    populateDisplay(decimal, 'decimal')
 })
 
 clearBtn.addEventListener('click', () => {
