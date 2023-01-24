@@ -35,6 +35,22 @@ function operate(operator, num1, num2){
     return result
 }
 
+function removeOperatorSelected () {
+    operateBtns.forEach((item) => {
+        item.classList.remove('operateBtnSelected')
+    })
+}
+
+function addOperatorSelected (button) {
+    removeOperatorSelected()
+
+    operateBtns.forEach((item) => {
+        if (item.innerHTML == button) {
+            item.classList.add('operateBtnSelected')
+        }
+    })
+}
+
 function populateDisplay (button, type) {
 
     //TODO: Not sure about behavior after htting equals sign where the next number is just appended on to the result
@@ -58,6 +74,11 @@ function populateDisplay (button, type) {
         }
     }
     else if (type == 'del') {
+        if (displayValues.operator && !displayValues.num2) {
+            displayValues.operator = '';
+            removeOperatorSelected()
+        }
+
         if (display.innerHTML.length == 1) {
             display.innerHTML = '0'
         }
@@ -77,7 +98,7 @@ function populateDisplay (button, type) {
             !displayValues.operator ? displayValues.num1 = display.innerHTML : displayValues.num2 = display.innerHTML
         }
     }
-    else {
+    else { //operator is selected
         if(displayValues.operator && displayValues.num2) {
             let result = operate(displayValues.operator, displayValues.num1, displayValues.num2);
             if (typeof result == 'number') {
@@ -86,10 +107,12 @@ function populateDisplay (button, type) {
     
             display.innerHTML = result;
             displayValues = {num1: display.innerHTML, operator: button, num2: ''};
+            addOperatorSelected(button)
             firstDigit = true;
         }
         else {
             displayValues.operator = button;
+            addOperatorSelected(button)
             firstDigit = true;
         }
     }
@@ -150,4 +173,5 @@ equalsBtn.addEventListener('click', () => {
     }    
     display.innerHTML = result;
     displayValues = {num1: display.innerHTML, operator: '', num2: ''};
+    removeOperatorSelected()
 })
