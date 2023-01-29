@@ -3,12 +3,12 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color:antiquewhite;
+    background-color:rgb(245, 234, 220);
 }
 
 .main {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -18,6 +18,7 @@ body {
     background-color: rgb(66, 58, 58);
     padding: 1rem;
     border-radius: 1rem;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
 }
 
 .displayContainer {
@@ -72,6 +73,14 @@ body {
     font-weight: bold;
     padding: 1rem 0.25rem 1rem 0.25rem;
     border-radius: 0.5rem;
+}
+
+.calcBtn {
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+}
+
+.calcBtn:hover {
+    filter: brightness(80%);
 }
 
 .footer {
